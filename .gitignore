@@ -1,0 +1,22 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Asset Excludes
+Assets/
+Theme/Assets/
+
+# Godot Helper Files
+*.tmp
+*.import
+*.csproj
+*.sln
+
+# Exports
+*.zip
+bin/
+export_presets.cfg
+
+# OS files
+.DS_Store
+desktop.ini

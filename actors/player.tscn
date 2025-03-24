@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://ddcvw626yrvxp"]
+
+[ext_resource type="Script" uid="uid://dxq61oyoqqyiy" path="res://actors/player.gd" id="1_rno31"]
+[ext_resource type="ArrayMesh" uid="uid://m0ahngx2t5sa" path="res://assets/mini-characters/character-female-f.obj" id="1_xbi1o"]
+[ext_resource type="Script" uid="uid://cwl6fw6cvqiqu" path="res://actors/camera.gd" id="2_wqva8"]
+[ext_resource type="Shader" uid="uid://cho0ra4sgpfe2" path="res://assets/shaders/pixelart_stylizer.gdshader" id="3_2d0tv"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uix83"]
+radius = 0.2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_57txa"]
+size = Vector2(12, 12)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hpojt"]
+render_priority = 0
+shader = ExtResource("3_2d0tv")
+shader_parameter/shadows_enabled = true
+shader_parameter/highlights_enabled = true
+shader_parameter/shadow_strength = 0.9
+shader_parameter/highlight_strength = 0.1
+shader_parameter/highlight_color = Color(1, 1, 1, 1)
+shader_parameter/shadow_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="RigidBody3D" unique_id=1334011587]
+collision_layer = 2
+axis_lock_angular_y = true
+mass = 5.0
+angular_damp = 20.0
+script = ExtResource("1_rno31")
+rolling_force = 600
+max_speed = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1160134496]
+shape = SubResource("SphereShape3D_uix83")
+
+[node name="CameraRig" type="Marker3D" parent="." unique_id=159444204]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Camera" type="Camera3D" parent="CameraRig" unique_id=622589947]
+transform = Transform3D(1, 0, 0, 0, 0.848048, 0.529919, 0, -0.529919, 0.848048, 0, 4.6, 6)
+projection = 1
+current = true
+size = 4.68493
+near = 0.001
+script = ExtResource("2_wqva8")
+
+[node name="Postprocess" type="MeshInstance3D" parent="CameraRig/Camera" unique_id=619435042]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.873369)
+mesh = SubResource("PlaneMesh_57txa")
+surface_material_override/0 = SubResource("ShaderMaterial_hpojt")
+
+[node name="Timer" type="Timer" parent="." unique_id=235992598]
+process_callback = 0
+wait_time = 4.0
+
+[node name="Character" type="MeshInstance3D" parent="." unique_id=1362401219]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+mesh = ExtResource("1_xbi1o")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

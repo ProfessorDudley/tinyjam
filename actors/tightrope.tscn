@@ -1,0 +1,88 @@
+[gd_scene load_steps=5 format=3 uid="uid://dq6cq5et62y4s"]
+
+[ext_resource type="ArrayMesh" uid="uid://dbkxac0jk2pic" path="res://assets/platformer-kit/ladder-long.obj" id="1_3cj70"]
+[ext_resource type="Script" path="res://actors/tightrope.gd" id="1_sb2jc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ikqy"]
+size = Vector3(0.5, 12, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qsc48"]
+size = Vector3(0.4, 1, 0.3)
+
+[node name="Tightrope" type="StaticBody3D" node_paths=PackedStringArray("spawn_points")]
+script = ExtResource("1_sb2jc")
+spawn_points = [NodePath("CloudSpawner/Marker3D"), NodePath("CloudSpawner/Marker3D2"), NodePath("CloudSpawner/Marker3D3"), NodePath("CloudSpawner/Marker3D4")]
+
+[node name="Ladder-long" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, -1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -2.14297e-20, 0, 0)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.31134e-07, 1.31134e-07, -1, -1, -1.33748e-14, 1.31134e-07, 3.82137e-15, 1, 1.31134e-07, -2.14297e-20, 0, -4)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, -1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -2.14297e-20, 0, -4)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.31134e-07, 1.31134e-07, -1, -1, -1.33748e-14, 1.31134e-07, 3.82137e-15, 1, 1.31134e-07, -2.14297e-20, 0, -8)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, -1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -2.14297e-20, 0, -8)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.31134e-07, 1.31134e-07, -1, -1, -1.33748e-14, 1.31134e-07, 3.82137e-15, 1, 1.31134e-07, -2.14297e-20, 0, -12)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, -1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, 0, 0, -6)
+shape = SubResource("BoxShape3D_1ikqy")
+
+[node name="SpawnTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, -1.57356e-28, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnTrigger"]
+transform = Transform3D(1, 0, -1.57356e-28, 0, 1, 0, 0, 0, 1, -2.20132e-25, 0, -2.61867)
+shape = SubResource("BoxShape3D_qsc48")
+
+[node name="SpawnAnchor" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="CloudSpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Marker3D" type="Marker3D" parent="CloudSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, -2, 0)
+
+[node name="Marker3D2" type="Marker3D" parent="CloudSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, 0)
+
+[node name="Marker3D3" type="Marker3D" parent="CloudSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, -2, 0)
+
+[node name="Marker3D4" type="Marker3D" parent="CloudSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, 0)
+
+[node name="Timer" type="Timer" parent="CloudSpawner"]
+wait_time = 3.0
+autostart = true
+
+[connection signal="body_entered" from="SpawnTrigger" to="." method="_on_spawn_trigger_body_entered"]
+[connection signal="body_entered" from="SpawnTrigger" to="CloudSpawner" method="_on_spawn_trigger_body_entered"]
+[connection signal="timeout" from="CloudSpawner/Timer" to="." method="_on_timer_timeout"]
