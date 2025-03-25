@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddcvw626yrvxp"]
+
+[ext_resource type="Script" path="res://actors/player.gd" id="1_rno31"]
+[ext_resource type="ArrayMesh" uid="uid://m0ahngx2t5sa" path="res://assets/mini-characters/character-female-f.obj" id="1_xbi1o"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uix83"]
+radius = 0.2
+
+[node name="Player" type="RigidBody3D"]
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+script = ExtResource("1_rno31")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_uix83")
+
+[node name="Timer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 4.0
+
+[node name="Character" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+mesh = ExtResource("1_xbi1o")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

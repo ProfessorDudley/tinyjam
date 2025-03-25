@@ -1,0 +1,722 @@
+[gd_scene load_steps=30 format=3 uid="uid://cbgeasv6e4vvr"]
+
+[ext_resource type="Script" path="res://scenes/hud.gd" id="1_t278i"]
+[ext_resource type="Script" path="res://scenes/label.gd" id="2_y2tvy"]
+[ext_resource type="PackedScene" uid="uid://f8m8fdm8ecuj" path="res://scenes/Game.tscn" id="3_ibemq"]
+[ext_resource type="ArrayMesh" uid="uid://c85spdgns1waa" path="res://assets/platformer-kit/block-grass-low-long.obj" id="4_2fpwc"]
+[ext_resource type="Texture2D" uid="uid://ctkbgljm3aiuy" path="res://Theme/Assets/ui-kit/cursorHand_beige.png" id="5_osd5m"]
+[ext_resource type="Texture2D" uid="uid://ck1jsuyytr4s1" path="res://Theme/Assets/input-kit/tile_0086.png" id="6_u2xu3"]
+[ext_resource type="Texture2D" uid="uid://cbbh6df8whfhb" path="res://Theme/Assets/input-kit/tile_0120.png" id="7_iestc"]
+[ext_resource type="Texture2D" uid="uid://dtq1fweyied53" path="res://Theme/Assets/input-kit/tile_0121.png" id="8_cmra3"]
+[ext_resource type="Texture2D" uid="uid://cohprtupgagfa" path="res://Theme/Assets/input-kit/tile_0122.png" id="9_wpdhb"]
+[ext_resource type="Texture2D" uid="uid://onlb810wd3s2" path="res://Theme/Assets/input-kit/tile_0219.png" id="10_77wfb"]
+[ext_resource type="Texture2D" uid="uid://bu7hpebvtfhpl" path="res://Theme/Assets/input-kit/tile_0143.png" id="11_pbixl"]
+[ext_resource type="Texture2D" uid="uid://cw0o33y36l3ql" path="res://Theme/Assets/input-kit/tile_0094.png" id="12_ycr8c"]
+[ext_resource type="Texture2D" uid="uid://cqgjhkovvicok" path="res://Theme/Assets/input-kit/tile_0017.png" id="13_h420g"]
+[ext_resource type="Texture2D" uid="uid://byy461dc57xk7" path="res://Theme/Assets/input-kit/tile_0617.png" id="14_7lyoq"]
+[ext_resource type="Texture2D" uid="uid://2nq8n3r5mq6v" path="res://Theme/Assets/ui-kit/buttonSquare_brown.png" id="15_jnw35"]
+[ext_resource type="Texture2D" uid="uid://cftf86mgwhhj7" path="res://Theme/Assets/ui-kit/buttonSquare_beige_pressed.png" id="16_usioa"]
+[ext_resource type="Script" path="res://scenes/game_over.gd" id="17_mrtt8"]
+
+[sub_resource type="Animation" id="Animation_ftbn3"]
+length = 0.001
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1.2, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1.2, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_ixhnr"]
+resource_name = "pulse"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1.1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1, 1.99472)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1.1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1, 1.99472)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ub6b7"]
+_data = {
+"RESET": SubResource("Animation_ftbn3"),
+"pulse": SubResource("Animation_ixhnr")
+}
+
+[sub_resource type="GDScript" id="GDScript_jupbg"]
+script/source = "extends Button
+# Play Button
+
+func _on_focus_entered() -> void:
+	$FocusIndicator.visible = true
+	$\"../QuitButton/FocusIndicator\".visible = false
+	$\"../ControlsButton/FocusIndicator\".visible = false
+
+
+func _on_focus_exited() -> void:
+	$FocusIndicator.visible = false 
+	#$\"../QuitButton/FocusIndicator\".visible = true
+
+
+func _on_mouse_entered() -> void:
+	$FocusIndicator.visible = true
+	$\"../QuitButton/FocusIndicator\".visible = false
+	$\"../ControlsButton/FocusIndicator\".visible = false
+
+
+func _on_mouse_exited() -> void:
+	$FocusIndicator.visible = false
+	#$\"../QuitButton/FocusIndicator\".visible = true
+"
+
+[sub_resource type="GDScript" id="GDScript_ekqxu"]
+script/source = "extends Button
+# Controls Button
+
+func _on_focus_entered() -> void:
+	$FocusIndicator.visible = true
+	$\"../QuitButton/FocusIndicator\".visible = false
+	$\"../PlayButton/FocusIndicator\".visible = false
+
+
+func _on_focus_exited() -> void:
+	$FocusIndicator.visible = false 
+	#$\"../QuitButton/FocusIndicator\".visible = true
+
+
+func _on_mouse_entered() -> void:
+	$FocusIndicator.visible = true
+	$\"../QuitButton/FocusIndicator\".visible = false
+	$\"../PlayButton/FocusIndicator\".visible = false
+
+
+func _on_mouse_exited() -> void:
+	$FocusIndicator.visible = false
+	#$\"../QuitButton/FocusIndicator\".visible = true
+"
+
+[sub_resource type="GDScript" id="GDScript_dr8r1"]
+script/source = "extends Button
+#Quit Button
+
+func _on_focus_entered() -> void:
+	$FocusIndicator.visible = true
+	$\"../PlayButton/FocusIndicator\".visible = false
+	$\"../ControlsButton/FocusIndicator\".visible = false
+
+
+func _on_focus_exited() -> void:
+	$FocusIndicator.visible = false
+	#$\"../PlayButton/FocusIndicator\".visible = true
+
+
+func _on_mouse_entered() -> void:
+	$FocusIndicator.visible = true
+	$\"../PlayButton/FocusIndicator\".visible = false
+	$\"../ControlsButton/FocusIndicator\".visible = false
+
+
+func _on_mouse_exited() -> void:
+	$FocusIndicator.visible = false
+	#$\"../PlayButton/FocusIndicator\".visible = true
+"
+
+[sub_resource type="Animation" id="Animation_2pkvv"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("menu-shadow:position:z")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-3.2974, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("menu-shadow:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.689683, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("menu-shadow:position:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:position:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(760, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:position:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(210, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_g67xq"]
+resource_name = "float"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(760, -0.25, 0, 0.25, 0, 760, -0.25, 0, 0.25, 0, 760, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1, 2)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(210, -0.25, 0, 0.25, 0, 200, -0.25, 0, 0.25, 0, 210, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1, 2)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("menu-shadow:position:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(-3.8, -0.25, 0, 0.25, 0, -3.9, -0.25, 0, 0.25, 0, -3.8, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1, 2)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("menu-shadow:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0.69, -0.25, 0, 0.25, 0, 0.69, -0.25, 0, 0.25, 0, 0.69, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1, 2)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("menu-shadow:position:x")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1, 2)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gminr"]
+_data = {
+"RESET": SubResource("Animation_2pkvv"),
+"float": SubResource("Animation_g67xq")
+}
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mdhov"]
+texture = ExtResource("15_jnw35")
+texture_margin_left = 13.0
+texture_margin_top = 7.0
+texture_margin_right = 14.0
+texture_margin_bottom = 7.0
+region_rect = Rect2(0, 0, 45, 49)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_i3tj6"]
+texture = ExtResource("16_usioa")
+texture_margin_left = 13.0
+texture_margin_top = 7.0
+texture_margin_right = 14.0
+texture_margin_bottom = 7.0
+region_rect = Rect2(0, 0, 45, 45)
+
+[sub_resource type="GDScript" id="GDScript_jf26a"]
+script/source = "extends Button
+
+
+func _unhandled_input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed(\"ui_cancel\"):
+		ButtonSfx.play()
+		$\"..\".visible = false
+		$\"../../MainContainer\".visible = true
+		$\"../../MainContainer/ControlsButton\".grab_focus()
+
+
+func _on_pressed() -> void:
+	ButtonSfx.play()
+	$\"..\".visible = false
+	$\"../../MainContainer\".visible = true
+	$\"../../MainContainer/ControlsButton\".grab_focus()
+"
+
+[node name="Main" type="Node3D"]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 16
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(73, 159)
+render_target_update_mode = 4
+
+[node name="Game" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_ibemq")]
+
+[node name="Player" parent="SubViewportContainer/SubViewport/Game" index="0"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.197, -1.292)
+constant_torque = Vector3(-3, 0, 0)
+
+[node name="DirectionalLight3D" parent="SubViewportContainer/SubViewport/Game" index="1"]
+shadow_normal_bias = 7.232
+shadow_blur = 0.289
+directional_shadow_split_2 = 0.366
+directional_shadow_split_3 = 0.699
+sky_mode = 1
+
+[node name="Killzone" parent="SubViewportContainer/SubViewport/Game" index="9" node_paths=PackedStringArray("game_over_screen")]
+game_over_screen = NodePath("../../../../CanvasLayer/GameOver")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+visible = false
+script = ExtResource("1_t278i")
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer" node_paths=PackedStringArray("player")]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 116.0
+offset_top = -19.0
+offset_right = 322.0
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderMedium"
+text = "Hello World"
+script = ExtResource("2_y2tvy")
+player = NodePath("../../SubViewportContainer/SubViewport/Game/Player")
+
+[node name="PausePanel" type="PanelContainer" parent="CanvasLayer"]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.2, 1.2)
+pivot_offset = Vector2(200, 100)
+
+[node name="HBoxContainer" type="VBoxContainer" parent="CanvasLayer/PausePanel"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="CanvasLayer/PausePanel/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "Paused!"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/PausePanel/HBoxContainer"]
+layout_mode = 2
+text = "press any button to continue"
+horizontal_alignment = 1
+
+[node name="PauseAnimation" type="AnimationPlayer" parent="CanvasLayer/PausePanel"]
+libraries = {
+"": SubResource("AnimationLibrary_ub6b7")
+}
+
+[node name="Credits" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -375.0
+offset_top = -87.0
+offset_right = 375.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Credits"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -238.0
+offset_top = -26.0
+offset_right = 238.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/Credits/VBoxContainer"]
+layout_mode = 2
+text = "Copyright Sam Dicken, 2025"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/Credits/VBoxContainer"]
+layout_mode = 2
+text = "Art and Music used under licence"
+horizontal_alignment = 1
+
+[node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = -1099.5
+offset_right = 703.0
+offset_bottom = -734.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="menu-shadow" type="MeshInstance3D" parent="CanvasLayer/MainMenu"]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.3, 0, 0.689683, -3.2974)
+mesh = ExtResource("4_2fpwc")
+
+[node name="MainContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"HeaderLarge"
+text = "Tiny Moves"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayButton" type="Button" parent="CanvasLayer/MainMenu/MainContainer"]
+layout_mode = 2
+text = "Play"
+script = SubResource("GDScript_jupbg")
+
+[node name="FocusIndicator" type="TextureRect" parent="CanvasLayer/MainMenu/MainContainer/PlayButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture = ExtResource("5_osd5m")
+
+[node name="ControlsButton" type="Button" parent="CanvasLayer/MainMenu/MainContainer"]
+layout_mode = 2
+text = "Controls"
+script = SubResource("GDScript_ekqxu")
+
+[node name="FocusIndicator" type="TextureRect" parent="CanvasLayer/MainMenu/MainContainer/ControlsButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture = ExtResource("5_osd5m")
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenu/MainContainer"]
+layout_mode = 2
+text = "Quit"
+script = SubResource("GDScript_dr8r1")
+
+[node name="FocusIndicator" type="TextureRect" parent="CanvasLayer/MainMenu/MainContainer/QuitButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture = ExtResource("5_osd5m")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/MainMenu"]
+libraries = {
+"": SubResource("AnimationLibrary_gminr")
+}
+autoplay = "float"
+
+[node name="ControlsContainer" type="Control" parent="CanvasLayer/MainMenu"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/ControlsContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"HeaderMedium"
+text = "Controls"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 30
+
+[node name="Control" type="Control" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 20.0
+grow_horizontal = 2
+size_flags_vertical = 3
+theme_type_variation = &"HeaderSmall"
+text = "Movement"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Node2D" type="Node2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control"]
+position = Vector2(85, 68)
+metadata/_edit_group_ = true
+
+[node name="Tile0086" type="Sprite2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control/Node2D"]
+scale = Vector2(3, 3)
+texture = ExtResource("6_u2xu3")
+
+[node name="Tile0120" type="Sprite2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control/Node2D"]
+position = Vector2(0, 48)
+scale = Vector2(3, 3)
+texture = ExtResource("7_iestc")
+
+[node name="Tile0121" type="Sprite2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control/Node2D"]
+position = Vector2(45, 48)
+scale = Vector2(3, 3)
+texture = ExtResource("8_cmra3")
+
+[node name="Tile0122" type="Sprite2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control/Node2D"]
+position = Vector2(-44, 48)
+scale = Vector2(3, 3)
+texture = ExtResource("9_wpdhb")
+
+[node name="Tile0219" type="Sprite2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control/Node2D"]
+position = Vector2(-34, 106)
+scale = Vector2(3, 3)
+texture = ExtResource("10_77wfb")
+
+[node name="Tile0143" type="Sprite2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control/Node2D"]
+position = Vector2(30, 106)
+scale = Vector2(3, 3)
+texture = ExtResource("11_pbixl")
+
+[node name="Control2" type="Control" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control2"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 20.0
+grow_horizontal = 2
+size_flags_vertical = 3
+theme_type_variation = &"HeaderSmall"
+text = "Pause"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Node2D" type="Node2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control2"]
+position = Vector2(100, 129)
+metadata/_edit_group_ = true
+
+[node name="Tile0094" type="Sprite2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control2/Node2D"]
+position = Vector2(-39, -3)
+scale = Vector2(3, 3)
+texture = ExtResource("12_ycr8c")
+
+[node name="Tile0017" type="Sprite2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control2/Node2D"]
+position = Vector2(15, -3)
+scale = Vector2(3, 3)
+texture = ExtResource("13_h420g")
+
+[node name="Tile0617" type="Sprite2D" parent="CanvasLayer/MainMenu/ControlsContainer/VBoxContainer/HBoxContainer/Control2/Node2D"]
+position = Vector2(-13, -53)
+scale = Vector2(3, 3)
+texture = ExtResource("14_7lyoq")
+
+[node name="Button" type="Button" parent="CanvasLayer/MainMenu/ControlsContainer"]
+layout_mode = 0
+offset_right = 37.0
+offset_bottom = 38.0
+theme_override_styles/focus = SubResource("StyleBoxTexture_mdhov")
+theme_override_styles/hover = SubResource("StyleBoxTexture_mdhov")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_i3tj6")
+theme_override_styles/normal = SubResource("StyleBoxTexture_mdhov")
+text = "<"
+script = SubResource("GDScript_jf26a")
+
+[node name="GameOver" type="PanelContainer" parent="CanvasLayer" node_paths=PackedStringArray("player")]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -201.0
+offset_top = -103.0
+offset_right = 199.0
+offset_bottom = 97.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.2, 1.2)
+pivot_offset = Vector2(200, 100)
+script = ExtResource("17_mrtt8")
+player = NodePath("../../SubViewportContainer/SubViewport/Game/Player")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="CanvasLayer/GameOver"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 27
+
+[node name="Label" type="Label" parent="CanvasLayer/GameOver/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "Game Over!"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/GameOver/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "score"
+horizontal_alignment = 1
+
+[node name="MainMenuButton" type="Button" parent="CanvasLayer/GameOver/HBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
+
+[node name="GameOverAnimation" type="AnimationPlayer" parent="CanvasLayer/GameOver"]
+libraries = {
+"": SubResource("AnimationLibrary_ub6b7")
+}
+autoplay = "pulse"
+
+[connection signal="focus_entered" from="CanvasLayer/MainMenu/MainContainer/PlayButton" to="CanvasLayer/MainMenu/MainContainer/PlayButton" method="_on_focus_entered"]
+[connection signal="focus_exited" from="CanvasLayer/MainMenu/MainContainer/PlayButton" to="CanvasLayer/MainMenu/MainContainer/PlayButton" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/MainMenu/MainContainer/PlayButton" to="CanvasLayer/MainMenu/MainContainer/PlayButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/MainMenu/MainContainer/PlayButton" to="CanvasLayer/MainMenu/MainContainer/PlayButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MainContainer/PlayButton" to="CanvasLayer" method="_on_play_button_pressed"]
+[connection signal="focus_entered" from="CanvasLayer/MainMenu/MainContainer/ControlsButton" to="CanvasLayer/MainMenu/MainContainer/ControlsButton" method="_on_focus_entered"]
+[connection signal="focus_exited" from="CanvasLayer/MainMenu/MainContainer/ControlsButton" to="CanvasLayer/MainMenu/MainContainer/ControlsButton" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/MainMenu/MainContainer/ControlsButton" to="CanvasLayer/MainMenu/MainContainer/ControlsButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/MainMenu/MainContainer/ControlsButton" to="CanvasLayer/MainMenu/MainContainer/ControlsButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MainContainer/ControlsButton" to="CanvasLayer" method="_on_controls_button_pressed"]
+[connection signal="focus_entered" from="CanvasLayer/MainMenu/MainContainer/QuitButton" to="CanvasLayer/MainMenu/MainContainer/QuitButton" method="_on_focus_entered"]
+[connection signal="focus_exited" from="CanvasLayer/MainMenu/MainContainer/QuitButton" to="CanvasLayer/MainMenu/MainContainer/QuitButton" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/MainMenu/MainContainer/QuitButton" to="CanvasLayer/MainMenu/MainContainer/QuitButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/MainMenu/MainContainer/QuitButton" to="CanvasLayer/MainMenu/MainContainer/QuitButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MainContainer/QuitButton" to="CanvasLayer" method="_on_quit_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/ControlsContainer/Button" to="CanvasLayer/MainMenu/ControlsContainer/Button" method="_on_pressed"]
+[connection signal="pressed" from="CanvasLayer/GameOver/HBoxContainer/MainMenuButton" to="CanvasLayer/GameOver" method="_on_main_menu_pressed"]
+
+[editable path="SubViewportContainer/SubViewport/Game"]
+[editable path="SubViewportContainer/SubViewport/Game/Player"]
+[editable path="SubViewportContainer/SubViewport/Game/TightropeContainer/Tightrope"]

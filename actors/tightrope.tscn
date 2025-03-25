@@ -1,0 +1,89 @@
+[gd_scene load_steps=8 format=3 uid="uid://dq6cq5et62y4s"]
+
+[ext_resource type="ArrayMesh" uid="uid://dbkxac0jk2pic" path="res://assets/platformer-kit/ladder-long.obj" id="1_3cj70"]
+[ext_resource type="Script" path="res://actors/tightrope.gd" id="1_sb2jc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ikqy"]
+size = Vector3(0.5, 12, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qsc48"]
+size = Vector3(0.4, 1, 0.3)
+
+[sub_resource type="Gradient" id="Gradient_207ws"]
+offsets = PackedFloat32Array(0.5, 0.51)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_s7kqx"]
+frequency = 0.0044
+fractal_gain = 0.725
+fractal_weighted_strength = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yfrwg"]
+height = 1200
+generate_mipmaps = false
+seamless = true
+color_ramp = SubResource("Gradient_207ws")
+noise = SubResource("FastNoiseLite_s7kqx")
+
+[node name="Tightrope" type="StaticBody3D" node_paths=PackedStringArray("spawn_points")]
+script = ExtResource("1_sb2jc")
+spawn_points = [null, null, null, null]
+
+[node name="Ladder-long" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, -1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -2.14297e-20, 0, 0)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.31134e-07, 1.31134e-07, -1, -1, -1.33748e-14, 1.31134e-07, 3.82137e-15, 1, 1.31134e-07, -2.14297e-20, 0, -4)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, -1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -2.14297e-20, 0, -4)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.31134e-07, 1.31134e-07, -1, -1, -1.33748e-14, 1.31134e-07, 3.82137e-15, 1, 1.31134e-07, -2.14297e-20, 0, -8)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, -1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -2.14297e-20, 0, -8)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="Ladder-long6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.31134e-07, 1.31134e-07, -1, -1, -1.33748e-14, 1.31134e-07, 3.82137e-15, 1, 1.31134e-07, -2.14297e-20, 0, -12)
+cast_shadow = 0
+mesh = ExtResource("1_3cj70")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, -1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, 0, 0, -6)
+shape = SubResource("BoxShape3D_1ikqy")
+
+[node name="SpawnTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, -1.57356e-28, 0, 1, 0, 0, 0, 1, 0, 0.7, -2.619)
+collision_mask = 2
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnTrigger"]
+transform = Transform3D(1, 0, -1.57356e-28, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_qsc48")
+
+[node name="SpawnAnchor" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Clouds" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -1, -4)
+modulate = Color(1, 1, 1, 0.501961)
+texture = SubResource("NoiseTexture2D_yfrwg")
+
+[connection signal="body_entered" from="SpawnTrigger" to="." method="_on_spawn_trigger_body_entered"]

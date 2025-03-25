@@ -1,0 +1,103 @@
+[gd_scene load_steps=8 format=3 uid="uid://bspngrou6v1w1"]
+
+[ext_resource type="ArrayMesh" uid="uid://dv5qv8swqhc8c" path="res://assets/platformer-kit/block-grass-hexagon.obj" id="2_5ruft"]
+[ext_resource type="ArrayMesh" uid="uid://boqbat8w1reb2" path="res://assets/platformer-kit/block-grass-large-tall.obj" id="3_3x8xb"]
+[ext_resource type="PackedScene" uid="uid://ddcvw626yrvxp" path="res://actors/player.tscn" id="5_cmo5r"]
+
+[sub_resource type="GDScript" id="GDScript_s5fvi"]
+resource_name = "Gamemode"
+script/source = "extends Node
+
+@export var touch_input : TouchScreenButton
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="Environment" id="Environment_ggjyw"]
+background_mode = 1
+background_color = Color(0.0823529, 0.592157, 1, 1)
+sky_custom_fov = 15.0
+sky_rotation = Vector3(-0.349066, 0, 1.5708)
+ambient_light_source = 2
+ambient_light_color = Color(0.478431, 0.341176, 0.333333, 1)
+tonemap_mode = 2
+fog_mode = 1
+fog_light_energy = 1.71
+fog_density = 1.0
+fog_sky_affect = 0.231
+fog_height = 0.21
+fog_height_density = 1.1782
+fog_depth_curve = 0.659754
+volumetric_fog_density = 0.349
+volumetric_fog_emission_energy = 28.2
+volumetric_fog_anisotropy = 0.19
+volumetric_fog_length = 88.35
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w0v1p"]
+size = Vector3(13.8, 1.1, 10.6839)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_2st6y"]
+height = 1.10397
+radius = 1.00056
+
+[node name="MobileGame" type="Node3D"]
+script = SubResource("GDScript_s5fvi")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.54407, 0.792865, -0.274506, 0.439136, 0.00969537, 0.898369, 0.714946, -0.609321, -0.3429, 0, 2.58754, 0)
+shadow_enabled = true
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.032
+directional_shadow_split_3 = 0.54
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ggjyw")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(-1, 4.6327e-08, -7.41387e-08, 0, 0.848048, 0.529919, 8.74228e-08, 0.529919, -0.848048, -5.24537e-07, 5, -6)
+projection = 1
+current = true
+size = 4.68493
+near = 0.001
+
+[node name="Terrain" type="Node" parent="."]
+
+[node name="Block-grass-hexagon" type="MeshInstance3D" parent="Terrain"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -2, 5.17839)
+mesh = ExtResource("2_5ruft")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Terrain"]
+collision_layer = 3
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Terrain/StaticBody3D"]
+transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 1, -0.0281515, -0.552606, 0.530952)
+shape = SubResource("BoxShape3D_w0v1p")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Terrain/StaticBody3D"]
+transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 1, -0.0281515, -0.552606, -5.12135)
+shape = SubResource("CylinderShape3D_2st6y")
+
+[node name="Block-grass-large-tall" type="MeshInstance3D" parent="Terrain/StaticBody3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, -10, 0)
+mesh = ExtResource("3_3x8xb")
+skeleton = NodePath("../../..")
+
+[node name="Barrier" type="StaticBody3D" parent="Terrain"]
+collision_mask = 2
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="Terrain/Barrier"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.190253, 0)
+depth = 2.85
+polygon = PackedVector2Array(-1.00357, 5.16801, -1.00357, 4.48056, -2.46289, 3.93784, -2.81264, 2.76797, -3.17446, 2.32174, -3.18652, 1.63429, -2.57143, 1.17599, -2.49907, -0.452174, -1.53854, -1.85805, -0.489536, -2.12183, 1.12998, -1.98074, 2.16671, -1.32435, 2.21658, 1.45338, 2.90403, 2.14083, 2.699, 2.92476, 1.8427, 3.47954, 0.962288, 4.27554, 0.998471, 5.18007, 6.2086, 5.15595, 6.11211, -3.21402, -6.14134, -3.05724, -6.03279, 5.20419)
+
+[node name="Player" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_cmo5r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.197394, 0)
+camera = NodePath("../Camera")

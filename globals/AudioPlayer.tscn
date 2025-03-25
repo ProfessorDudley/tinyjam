@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://diyitdej8rgws"]
+
+[ext_resource type="AudioStream" uid="uid://c4wg0udvwyahp" path="res://assets/sounds/BGMブリキのおもちゃ.mp3" id="1_hw8id"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer"]
+process_mode = 3
+stream = ExtResource("1_hw8id")
+autoplay = true
+bus = &"BGM"

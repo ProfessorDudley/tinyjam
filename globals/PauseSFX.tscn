@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfad6v12nkw7g"]
+
+[ext_resource type="AudioStream" uid="uid://bj2oggyqehthi" path="res://Theme/Assets/sounds/drop_003.ogg" id="1_r25yr"]
+
+[node name="PauseSfx" type="AudioStreamPlayer"]
+process_mode = 3
+stream = ExtResource("1_r25yr")
+volume_db = 8.0
