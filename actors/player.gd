@@ -24,8 +24,6 @@ func _input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	var space_state = get_world_3d().direct_space_state
 	
-	var mouse_position = get_viewport().get_mouse_position()
-	
 	var ray_origin = camera.project_ray_origin(input_touch)
 	var ray_end = ray_origin + camera.project_ray_normal(input_touch) * 1000
 	
