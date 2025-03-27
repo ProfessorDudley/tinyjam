@@ -1,5 +1,6 @@
-[gd_scene load_steps=23 format=4 uid="uid://bspngrou6v1w1"]
+[gd_scene load_steps=25 format=4 uid="uid://bspngrou6v1w1"]
 
+[ext_resource type="Script" path="res://scenes/killzone.gd" id="1_t5umd"]
 [ext_resource type="ArrayMesh" uid="uid://dv5qv8swqhc8c" path="res://assets/platformer-kit/block-grass-hexagon.obj" id="2_5ruft"]
 [ext_resource type="ArrayMesh" uid="uid://boqbat8w1reb2" path="res://assets/platformer-kit/block-grass-large-tall.obj" id="3_3x8xb"]
 [ext_resource type="PackedScene" uid="uid://ddcvw626yrvxp" path="res://actors/player.tscn" id="5_cmo5r"]
@@ -175,6 +176,8 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_drn51"]
+
 [node name="MobileGame" type="Node3D"]
 script = SubResource("GDScript_s5fvi")
 
@@ -189,11 +192,14 @@ directional_shadow_split_3 = 0.54
 environment = SubResource("Environment_ggjyw")
 
 [node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(-1, 4.6327e-08, -7.41387e-08, 0, 0.848048, 0.529919, 8.74228e-08, 0.529919, -0.848048, -5.24537e-07, 5, -6)
+transform = Transform3D(-1, 4.6327e-08, -7.41387e-08, 0, 0.848048, 0.529919, 8.74228e-08, 0.529919, -0.848048, 0, 5.3, -4.28903)
 projection = 1
 current = true
 size = 4.68493
 near = 0.001
+
+[node name="Player" parent="." instance=ExtResource("5_cmo5r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.197394, 1.71097)
 
 [node name="Terrain" type="Node" parent="."]
 
@@ -203,7 +209,6 @@ mesh = ExtResource("2_5ruft")
 skeleton = NodePath("../..")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Terrain"]
-collision_layer = 3
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Terrain/StaticBody3D"]
 transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 1, -0.0281515, -0.552606, 0.530952)
@@ -221,12 +226,9 @@ skeleton = NodePath("../../..")
 [node name="Barrier" type="StaticBody3D" parent="Terrain"]
 
 [node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="Terrain/Barrier"]
-transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 1.03563, 0)
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0.907729, 0)
 depth = 2.85
 polygon = PackedVector2Array(-0.98605, 5.76495, -1.00357, 4.48056, -1.27697, 2.9264, -1.99145, 2.53838, -2.00524, -1.0414, -1.53854, -1.85805, -0.489536, -2.12183, 1.45563, -1.94909, 2.00327, -1.25442, 1.98093, 2.93643, 1.35721, 3.46269, 0.987013, 4.47455, 0.996392, 5.74243, 6.2086, 5.15595, 6.11211, -3.21402, -6.14134, -3.05724, -6.03279, 5.20419)
-
-[node name="Player" parent="." instance=ExtResource("5_cmo5r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.197394, 0)
 
 [node name="Fences" type="Node" parent="."]
 
@@ -292,7 +294,7 @@ transform = Transform3D(-0.474447, 0.00403815, -0.880275, 0.00541818, 0.999984, 
 mesh = SubResource("ArrayMesh_77ui2")
 
 [node name="Plant7" type="MeshInstance3D" parent="Plants"]
-transform = Transform3D(0.466356, 0, 0.884597, 0, 1, 0, -0.884597, 0, 0.466356, 0.549608, 0, 2.65)
+transform = Transform3D(-0.0681716, 0, 0.997674, 0, 1, 0, -0.997674, 0, -0.0681716, 0.549608, 0, 2.65)
 mesh = SubResource("ArrayMesh_vycqn")
 
 [node name="Flowers3" type="MeshInstance3D" parent="Plants"]
@@ -320,3 +322,14 @@ mesh = ExtResource("10_etj3u")
 [node name="Tree-pine2" type="MeshInstance3D" parent="Foliage"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.70967, 0, 3.27935)
 mesh = ExtResource("10_etj3u")
+
+[node name="Killzone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.65, 7.106)
+collision_mask = 8
+script = ExtResource("1_t5umd")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Killzone"]
+shape = SubResource("WorldBoundaryShape3D_drn51")
+
+[connection signal="body_entered" from="Killzone" to="Killzone" method="_on_body_entered"]

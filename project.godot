@@ -115,6 +115,7 @@ pointing/handheld/orientation=1
 [layer_names]
 
 3d_physics/layer_2="Player"
+3d_physics/layer_4="Player"
 
 [rendering]
 

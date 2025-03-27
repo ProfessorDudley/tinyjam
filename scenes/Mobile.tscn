@@ -1,13 +1,53 @@
-[gd_scene load_steps=5 format=3 uid="uid://gs4snwne78ad"]
+[gd_scene load_steps=9 format=3 uid="uid://gs4snwne78ad"]
 
+[ext_resource type="Script" path="res://scenes/mobile.gd" id="1_l5b47"]
 [ext_resource type="Script" path="res://scenes/hud.gd" id="1_mgaik"]
 [ext_resource type="Script" path="res://scenes/virtual-joystick.gd" id="3_b5jcg"]
 [ext_resource type="PackedScene" uid="uid://bspngrou6v1w1" path="res://scenes/mobile_game.tscn" id="3_nngmw"]
+
+[sub_resource type="Animation" id="Animation_d413u"]
+resource_name = "title_idle"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainMenu:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 3.96667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(312.5, 900), Vector2(312.5, 870), Vector2(312.5, 900)]
+}
+
+[sub_resource type="Animation" id="Animation_8evmj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainMenu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(312.5, 900)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oubsv"]
+_data = {
+"RESET": SubResource("Animation_8evmj"),
+"title_idle": SubResource("Animation_d413u")
+}
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hf52p"]
 size = Vector2(1290, 1600)
 
 [node name="Mobile" type="Node"]
+script = ExtResource("1_l5b47")
 
 [node name="MainMenu" type="CanvasLayer" parent="."]
 process_mode = 3
@@ -21,9 +61,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -332.5
-offset_top = -73.0
+offset_top = -498.0
 offset_right = 332.5
-offset_bottom = 73.0
+offset_bottom = -352.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -34,6 +74,12 @@ theme_type_variation = &"HeaderLarge"
 text = "Tiny Moves"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainMenu"]
+libraries = {
+"": SubResource("AnimationLibrary_oubsv")
+}
+autoplay = "title_idle"
 
 [node name="Game" type="CanvasLayer" parent="."]
 
@@ -57,15 +103,36 @@ render_target_update_mode = 4
 [node name="MobileGame" parent="Game/SubViewportContainer/SubViewport" node_paths=PackedStringArray("touch_input") instance=ExtResource("3_nngmw")]
 touch_input = NodePath("../../../TouchScreenButton")
 
-[node name="Player" parent="Game/SubViewportContainer/SubViewport/MobileGame" index="4" node_paths=PackedStringArray("_input", "_camera")]
+[node name="Player" parent="Game/SubViewportContainer/SubViewport/MobileGame" index="3" node_paths=PackedStringArray("_input", "_camera")]
 _input = NodePath("../../../../TouchScreenButton")
 _camera = NodePath("../Camera")
+
+[node name="Control" type="Control" parent="Game"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 555.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="Game/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderLarge"
+text = "Score"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="Game"]
 position = Vector2(645, 1995)
 shape = SubResource("RectangleShape2D_hf52p")
+shape_visible = false
 script = ExtResource("3_b5jcg")
 
+[connection signal="pressed" from="Game/TouchScreenButton" to="MainMenu" method="_on_touch_screen_button_pressed"]
 [connection signal="pressed" from="Game/TouchScreenButton" to="Game/TouchScreenButton" method="_on_pressed"]
 [connection signal="released" from="Game/TouchScreenButton" to="Game/TouchScreenButton" method="_on_released"]
 
