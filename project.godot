@@ -29,12 +29,12 @@ PauseSfx="*res://globals/PauseSFX.tscn"
 
 [display]
 
-window/size/viewport_width=1179
-window/size/viewport_height=2556
+window/size/viewport_width=1290
+window/size/viewport_height=2796
 window/size/resizable=false
 window/size/borderless=true
-window/size/window_width_override=589
-window/size/window_height_override=1278
+window/size/window_width_override=645
+window/size/window_height_override=1398
 window/stretch/mode="canvas_items"
 window/handheld/orientation=1
 
@@ -110,7 +110,6 @@ TouchInput={
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
-pointing/emulate_mouse_from_touch=false
 pointing/handheld/orientation=1
 
 [layer_names]

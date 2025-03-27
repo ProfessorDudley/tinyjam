@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://gs4snwne78ad"]
+[gd_scene load_steps=5 format=3 uid="uid://gs4snwne78ad"]
 
 [ext_resource type="Script" path="res://scenes/hud.gd" id="1_mgaik"]
+[ext_resource type="Script" path="res://scenes/virtual-joystick.gd" id="3_b5jcg"]
 [ext_resource type="PackedScene" uid="uid://bspngrou6v1w1" path="res://scenes/mobile_game.tscn" id="3_nngmw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hf52p"]
+size = Vector2(1290, 1600)
 
 [node name="Mobile" type="Node"]
 
@@ -17,9 +21,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -332.5
-offset_top = -151.0
+offset_top = -73.0
 offset_right = 332.5
-offset_bottom = -5.0
+offset_bottom = 73.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -47,7 +51,22 @@ metadata/_edit_lock_ = true
 [node name="SubViewport" type="SubViewport" parent="Game/SubViewportContainer"]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(73, 159)
+size = Vector2i(80, 174)
 render_target_update_mode = 4
 
-[node name="MobileGame" parent="Game/SubViewportContainer/SubViewport" instance=ExtResource("3_nngmw")]
+[node name="MobileGame" parent="Game/SubViewportContainer/SubViewport" node_paths=PackedStringArray("touch_input") instance=ExtResource("3_nngmw")]
+touch_input = NodePath("../../../TouchScreenButton")
+
+[node name="Player" parent="Game/SubViewportContainer/SubViewport/MobileGame" index="4" node_paths=PackedStringArray("_input", "_camera")]
+_input = NodePath("../../../../TouchScreenButton")
+_camera = NodePath("../Camera")
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Game"]
+position = Vector2(645, 1995)
+shape = SubResource("RectangleShape2D_hf52p")
+script = ExtResource("3_b5jcg")
+
+[connection signal="pressed" from="Game/TouchScreenButton" to="Game/TouchScreenButton" method="_on_pressed"]
+[connection signal="released" from="Game/TouchScreenButton" to="Game/TouchScreenButton" method="_on_released"]
+
+[editable path="Game/SubViewportContainer/SubViewport/MobileGame"]

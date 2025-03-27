@@ -14,16 +14,9 @@
 resource_name = "Gamemode"
 script/source = "extends Node
 
-@export var touch_input : TouchScreenButton
+@export var touch_input : VirtualJoystick
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
+	
 "
 
 [sub_resource type="Environment" id="Environment_ggjyw"]
@@ -226,16 +219,14 @@ mesh = ExtResource("3_3x8xb")
 skeleton = NodePath("../../..")
 
 [node name="Barrier" type="StaticBody3D" parent="Terrain"]
-collision_mask = 2
 
 [node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="Terrain/Barrier"]
-transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, -0.190253, 0)
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 1.03563, 0)
 depth = 2.85
-polygon = PackedVector2Array(-0.98605, 5.76495, -1.00357, 4.48056, -1.27697, 2.9264, -1.99145, 2.53838, -2.00524, -1.0414, -1.53854, -1.85805, -0.489536, -2.12183, 1.45563, -1.94909, 2.00327, -1.25442, 2.00023, 2.68783, 1.38767, 3.50688, 0.987013, 4.47455, 0.996392, 5.74243, 6.2086, 5.15595, 6.11211, -3.21402, -6.14134, -3.05724, -6.03279, 5.20419)
+polygon = PackedVector2Array(-0.98605, 5.76495, -1.00357, 4.48056, -1.27697, 2.9264, -1.99145, 2.53838, -2.00524, -1.0414, -1.53854, -1.85805, -0.489536, -2.12183, 1.45563, -1.94909, 2.00327, -1.25442, 1.98093, 2.93643, 1.35721, 3.46269, 0.987013, 4.47455, 0.996392, 5.74243, 6.2086, 5.15595, 6.11211, -3.21402, -6.14134, -3.05724, -6.03279, 5.20419)
 
-[node name="Player" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_cmo5r")]
+[node name="Player" parent="." instance=ExtResource("5_cmo5r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.197394, 0)
-camera = NodePath("../Camera")
 
 [node name="Fences" type="Node" parent="."]
 
@@ -311,7 +302,7 @@ mesh = SubResource("ArrayMesh_77ui2")
 [node name="Foliage" type="Node" parent="."]
 
 [node name="Rocks" type="MeshInstance3D" parent="Foliage"]
-transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -2.05925, 0, 3.13664)
+transform = Transform3D(0.423045, 0, -0.906109, 0, 1, 0, 0.906109, 0, 0.423045, -1.7279, 0, 3.54596)
 mesh = ExtResource("9_531be")
 
 [node name="Rocks2" type="MeshInstance3D" parent="Foliage"]
@@ -323,7 +314,7 @@ transform = Transform3D(-0.391615, 0, 0.920129, 0, 1, 0, -0.920129, 0, -0.391615
 mesh = ExtResource("9_531be")
 
 [node name="Tree-pine" type="MeshInstance3D" parent="Foliage"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78455, 0, 3.96266)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78455, 0, 4.17706)
 mesh = ExtResource("10_etj3u")
 
 [node name="Tree-pine2" type="MeshInstance3D" parent="Foliage"]
