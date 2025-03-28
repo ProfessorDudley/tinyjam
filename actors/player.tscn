@@ -8,10 +8,11 @@ radius = 0.2
 
 [node name="Player" type="RigidBody3D"]
 collision_layer = 8
-axis_lock_angular_x = true
-axis_lock_angular_y = true
-axis_lock_angular_z = true
+mass = 46.0
+can_sleep = false
+angular_damp = 6.0
 script = ExtResource("1_rno31")
+_force_multiplier = 40
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_uix83")
@@ -22,6 +23,7 @@ wait_time = 4.0
 
 [node name="Character" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+top_level = true
 mesh = ExtResource("1_xbi1o")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

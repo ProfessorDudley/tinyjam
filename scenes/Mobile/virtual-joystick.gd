@@ -1,7 +1,7 @@
 class_name VirtualJoystick extends TouchScreenButton
 
 var _pressed: bool
-var ORIGIN: Vector2 = self.position
+var ORIGIN: Vector2 = self.position + Vector2(0, 160)
 var _input_vector: Vector2 = ORIGIN
 var _output_vector: Vector2
 

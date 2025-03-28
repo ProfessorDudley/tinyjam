@@ -1,9 +1,24 @@
-[gd_scene load_steps=9 format=3 uid="uid://gs4snwne78ad"]
+[gd_scene load_steps=10 format=3 uid="uid://gs4snwne78ad"]
 
-[ext_resource type="Script" path="res://scenes/mobile.gd" id="1_l5b47"]
-[ext_resource type="Script" path="res://scenes/hud.gd" id="1_mgaik"]
-[ext_resource type="Script" path="res://scenes/virtual-joystick.gd" id="3_b5jcg"]
-[ext_resource type="PackedScene" uid="uid://bspngrou6v1w1" path="res://scenes/mobile_game.tscn" id="3_nngmw"]
+[ext_resource type="Script" path="res://scenes/Mobile/mobile.gd" id="1_ofnvm"]
+[ext_resource type="Script" path="res://scenes/Mobile/main_menu.gd" id="2_qwflu"]
+[ext_resource type="PackedScene" uid="uid://bspngrou6v1w1" path="res://scenes/Mobile/mobile_game.tscn" id="3_a2cso"]
+[ext_resource type="Script" path="res://scenes/Mobile/virtual-joystick.gd" id="4_wj1pg"]
+
+[sub_resource type="Animation" id="Animation_8evmj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainMenu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(312.5, 900)]
+}
 
 [sub_resource type="Animation" id="Animation_d413u"]
 resource_name = "title_idle"
@@ -22,37 +37,31 @@ tracks/0/keys = {
 "values": [Vector2(312.5, 900), Vector2(312.5, 870), Vector2(312.5, 900)]
 }
 
-[sub_resource type="Animation" id="Animation_8evmj"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MainMenu:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(312.5, 900)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_oubsv"]
 _data = {
 "RESET": SubResource("Animation_8evmj"),
 "title_idle": SubResource("Animation_d413u")
 }
 
+[sub_resource type="GDScript" id="GDScript_madyb"]
+resource_name = "ScoreLabel"
+script/source = "extends Label
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	text = str($\"../../SubViewportContainer/SubViewport/MobileGame\".score)
+"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hf52p"]
-size = Vector2(1290, 1600)
+size = Vector2(1290, 1300)
 
 [node name="Mobile" type="Node"]
-script = ExtResource("1_l5b47")
+script = ExtResource("1_ofnvm")
 
 [node name="MainMenu" type="CanvasLayer" parent="."]
 process_mode = 3
 layer = 3
-script = ExtResource("1_mgaik")
+script = ExtResource("2_qwflu")
 
 [node name="MainMenu" type="PanelContainer" parent="MainMenu"]
 anchors_preset = 8
@@ -60,10 +69,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -332.5
-offset_top = -498.0
-offset_right = 332.5
-offset_bottom = -352.0
+offset_left = -504.0
+offset_top = -530.5
+offset_right = 504.0
+offset_bottom = -319.5
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -91,16 +100,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
-stretch_shrink = 16
+stretch_shrink = 8
 metadata/_edit_lock_ = true
 
 [node name="SubViewport" type="SubViewport" parent="Game/SubViewportContainer"]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(80, 174)
+size = Vector2i(161, 349)
 render_target_update_mode = 4
 
-[node name="MobileGame" parent="Game/SubViewportContainer/SubViewport" node_paths=PackedStringArray("touch_input") instance=ExtResource("3_nngmw")]
+[node name="MobileGame" parent="Game/SubViewportContainer/SubViewport" node_paths=PackedStringArray("touch_input") instance=ExtResource("3_a2cso")]
 touch_input = NodePath("../../../TouchScreenButton")
 
 [node name="Player" parent="Game/SubViewportContainer/SubViewport/MobileGame" index="3" node_paths=PackedStringArray("_input", "_camera")]
@@ -125,12 +134,12 @@ theme_type_variation = &"HeaderLarge"
 text = "Score"
 horizontal_alignment = 1
 vertical_alignment = 1
+script = SubResource("GDScript_madyb")
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="Game"]
-position = Vector2(645, 1995)
+position = Vector2(645, 2146)
 shape = SubResource("RectangleShape2D_hf52p")
-shape_visible = false
-script = ExtResource("3_b5jcg")
+script = ExtResource("4_wj1pg")
 
 [connection signal="pressed" from="Game/TouchScreenButton" to="MainMenu" method="_on_touch_screen_button_pressed"]
 [connection signal="pressed" from="Game/TouchScreenButton" to="Game/TouchScreenButton" method="_on_pressed"]

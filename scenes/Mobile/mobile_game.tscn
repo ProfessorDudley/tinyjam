@@ -1,6 +1,5 @@
-[gd_scene load_steps=25 format=4 uid="uid://bspngrou6v1w1"]
+[gd_scene load_steps=27 format=4 uid="uid://bspngrou6v1w1"]
 
-[ext_resource type="Script" path="res://scenes/killzone.gd" id="1_t5umd"]
 [ext_resource type="ArrayMesh" uid="uid://dv5qv8swqhc8c" path="res://assets/platformer-kit/block-grass-hexagon.obj" id="2_5ruft"]
 [ext_resource type="ArrayMesh" uid="uid://boqbat8w1reb2" path="res://assets/platformer-kit/block-grass-large-tall.obj" id="3_3x8xb"]
 [ext_resource type="PackedScene" uid="uid://ddcvw626yrvxp" path="res://actors/player.tscn" id="5_cmo5r"]
@@ -10,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://c20wwcfmcpc3h" path="res://assets/platformer-kit/Textures/colormap.png" id="8_0w8n5"]
 [ext_resource type="ArrayMesh" uid="uid://dgh555x3wumtl" path="res://assets/platformer-kit/rocks.obj" id="9_531be"]
 [ext_resource type="ArrayMesh" uid="uid://dr88hfc0d5xdu" path="res://actors/ShaderTree.tres" id="10_etj3u"]
+[ext_resource type="PackedScene" uid="uid://g2pqi3kwmix1" path="res://scenes/Platforms/PlatformA.tscn" id="10_i7tom"]
+[ext_resource type="PackedScene" uid="uid://ek6qgykidayl" path="res://scenes/Platforms/PlatformB.tscn" id="11_oia8a"]
 
 [sub_resource type="GDScript" id="GDScript_s5fvi"]
 resource_name = "Gamemode"
@@ -17,7 +18,10 @@ script/source = "extends Node
 
 @export var touch_input : VirtualJoystick
 
-	
+var score: int = 0
+
+func _process(delta: float) -> void:
+	score = clampf($Player.position.z, 0, 9999999)
 "
 
 [sub_resource type="Environment" id="Environment_ggjyw"]
@@ -176,6 +180,17 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
+[sub_resource type="GDScript" id="GDScript_33k3s"]
+resource_name = "Deathplane"
+script/source = "class_name DeathPlane extends Area3D
+
+signal player_fell
+
+func _on_body_entered(_body: Node3D) -> void:
+	player_fell.emit()
+	get_tree().call_deferred(\"reload_current_scene\")
+"
+
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_drn51"]
 
 [node name="MobileGame" type="Node3D"]
@@ -326,10 +341,22 @@ mesh = ExtResource("10_etj3u")
 [node name="Killzone" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.65, 7.106)
 collision_mask = 8
-script = ExtResource("1_t5umd")
+script = SubResource("GDScript_33k3s")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Killzone"]
 shape = SubResource("WorldBoundaryShape3D_drn51")
+
+[node name="PlatformA" parent="." instance=ExtResource("10_i7tom")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.495756, -0.000618935, 5.89635)
+
+[node name="PlatformB" parent="." instance=ExtResource("11_oia8a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.182099, 0, 12.9103)
+
+[node name="PlatformB2" parent="." instance=ExtResource("11_oia8a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.182099, 0, 26.8765)
+
+[node name="PlatformA3" parent="." instance=ExtResource("10_i7tom")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.495756, -0.000618935, 19.8597)
 
 [connection signal="body_entered" from="Killzone" to="Killzone" method="_on_body_entered"]
